@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, watch, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { logBar } from './debug'
 
 export interface NotebookItem {
   name: string
@@ -46,40 +47,56 @@ const currentType = computed(
 )
 
 function toggleDropdown() {
-  if (props.disabled) return
+  if (props.disabled) {
+    logBar.warn('toggleDropdown SKIP 组件已禁用')
+    return
+  }
   open.value = !open.value
+  logBar.log('dropdown', open.value ? 'open' : 'close')
 }
 
 function selectNotebook(name: string) {
   open.value = false
-  if (name === props.current) return
+  if (name === props.current) {
+    logBar.log('selectNotebook 忽略重复选择', name)
+    return
+  }
+  logBar.log('emit switch', { from: props.current, to: name })
   emit('switch', name)
 }
 
 function onNew() {
   if (props.disabled) return
+  logBar.log('emit new')
   emit('new')
 }
 
 function onDelete() {
   if (props.disabled) return
-  if (props.notebooks.length <= 1) return
+  if (props.notebooks.length <= 1) {
+    logBar.warn('onDelete SKIP 仅剩一个笔记本')
+    return
+  }
   const ok = window.confirm(`确定删除笔记本 "${props.current}"？此操作不可恢复`)
+  logBar.log('onDelete confirmed', { name: props.current, confirmed: ok })
   if (ok) emit('delete', props.current)
 }
 
 function onConfig() {
   if (props.disabled) return
+  logBar.log('emit config')
   emit('config')
 }
 
 function onManualSave() {
   if (props.disabled) return
+  logBar.log('emit manual-save')
   emit('manual-save')
 }
 
 function onToggleSidebar() {
   if (props.disabled) return
+  logBar.log('emit toggle-sidebar')
   emit('toggle-sidebar')
 }
 
@@ -100,14 +117,24 @@ const statusText = computed(() => {
 
 let timer: ReturnType<typeof setTimeout> | undefined
 
+onMounted(() => {
+  logBar.log('mounted', {
+    current: props.current,
+    notebooks: props.notebooks.length,
+    disabled: props.disabled,
+  })
+})
+
 watch(
   () => props.saveStatus,
   (val) => {
+    logBar.log('saveStatus 变化', val)
     displayStatus.value = val
     if (val === 'saved') {
       if (timer) clearTimeout(timer)
       timer = setTimeout(() => {
         displayStatus.value = 'idle'
+        logBar.log('saved 状态自动回 idle')
       }, 3000)
     }
   },
@@ -116,6 +143,7 @@ watch(
 
 onBeforeUnmount(() => {
   if (timer) clearTimeout(timer)
+  logBar.log('unmounted')
 })
 </script>
 

@@ -1,5 +1,6 @@
 import { createApp, ref } from 'vue'
 import NotebookBar from './NotebookBar.vue'
+import { logDemo } from './debug'
 
 const App = {
   components: { NotebookBar },
@@ -18,13 +19,13 @@ const App = {
       saveStatus,
       onSwitch: (n: string) => {
         current.value = n
-        console.log('switch', n)
+        logDemo.log('switch', n)
       },
-      onNew: () => console.log('new'),
-      onDelete: (n: string) => console.log('delete', n),
-      onConfig: () => console.log('config'),
-      onManualSave: () => console.log('manual-save'),
-      onToggleSidebar: () => console.log('toggle-sidebar')
+      onNew: () => logDemo.log('new'),
+      onDelete: (n: string) => logDemo.log('delete', n),
+      onConfig: () => logDemo.log('config'),
+      onManualSave: () => logDemo.log('manual-save'),
+      onToggleSidebar: () => logDemo.log('toggle-sidebar')
     }
   },
   template: `

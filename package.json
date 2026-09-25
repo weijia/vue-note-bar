@@ -1,6 +1,6 @@
 {
   "name": "vue-note-bar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A Vue 3 top-bar component (NotebookBar) to switch / create / delete notebooks and trigger backend config & manual save. No data layer, no storage.",
   "type": "module",
   "main": "dist/vue-note-bar.umd.cjs",
@@ -45,5 +45,8 @@
     "vite-plugin-css-injected-by-js": "^3.5.2",
     "vite-plugin-dts": "^4.0.0",
     "vue": "^3.4.0"
+  },
+  "dependencies": {
+    "@richard432/localstorage-logger": "^0.1.0"
   }
 }

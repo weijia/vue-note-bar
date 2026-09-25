@@ -10,3 +10,20 @@ const NotebookBar = _NotebookBar as typeof _NotebookBar & Plugin
 export default NotebookBar
 export { _NotebookBar as NotebookBar }
 export type { NotebookItem, SaveStatus } from './NotebookBar.vue'
+
+// 调试开关 API（详见 ./debug）
+export {
+  DEBUG_NAMESPACES,
+  createDebugLogger,
+  describeDebug,
+  disableDebug,
+  enableDebug,
+  enabledDebugNamespaces,
+  initDebug,
+  isDebugOn,
+  listDebug,
+  matchesNamespace,
+  setDebug,
+  silenceDebug,
+} from './debug'
+export type { DebugNamespace } from './debug'
